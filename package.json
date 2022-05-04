@@ -2,6 +2,8 @@
 	"name": "idefix-vsc",
 	"displayName": "idefix-vsc",
 	"description": "",
+	"author": "Romain Vacheret",
+	"repository": "https://github.com/RomainVacheret/idefix-vsc",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.66.0"
@@ -10,14 +12,24 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:idefix-vsc.helloWorld"
+		"onCommand:idefix-vsc.helloWorld",
+		"onCommand:idefix-vsc.transferWorkspaceFolderCommand",
+		"onCommand:idefix-vsc.compileProjectCommand"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "idefix-vsc.helloWorld",
-				"title": "Hello World"
+				"title": "IDEfix: Hello World"
+			},
+			{
+				"command": "idefix-vsc.transferWorkspaceFolderCommand",
+				"title": "IDEfix: Transfer folder"
+			},
+			{
+				"command": "idefix-vsc.compileProjectCommand",
+				"title": "IDEfix: Compile project"
 			}
 		]
 	},
@@ -41,5 +53,9 @@
 		"mocha": "^9.2.2",
 		"typescript": "^4.6.4",
 		"@vscode/test-electron": "^2.1.3"
+	},
+	"dependencies": {
+		"basic-ftp": "^4.6.6",
+		"jayson": "^3.6.6"
 	}
 }

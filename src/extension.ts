@@ -1,26 +1,29 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vsc from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "idefix-vsc" is now active!');
+import { transferWorkspaceFolderCommand } from './commands/files';
+import {compileProjectCommand } from './commands/execution';
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('idefix-vsc.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from idefix-vsc!');
+const _clearWorkspaceStates = (context: vsc.ExtensionContext) => 
+	context.workspaceState.keys()
+		.forEach((key: string) => context.workspaceState.update(key, undefined));
+
+export function activate(context: vsc.ExtensionContext) {
+	// TODO: May be a useful to keep them in the future
+	_clearWorkspaceStates(context);	
+	const disposable = vsc.commands.registerCommand('idefix-vsc.helloWorld', () => {
+		vsc.window.showInformationMessage('Hello World from idefix-vsc!');
 	});
 
+	const commandTransferWorkspaceFolderCommand = vsc.commands.registerCommand(
+		'idefix-vsc.transferWorkspaceFolderCommand', 
+		() => transferWorkspaceFolderCommand(context));
+	const commandCompileProjectCommand = vsc.commands.registerCommand(
+		'idefix-vsc.compileProjectCommand',
+		() => compileProjectCommand(context));
+
 	context.subscriptions.push(disposable);
+	context.subscriptions.push(commandTransferWorkspaceFolderCommand);
+	context.subscriptions.push(commandCompileProjectCommand);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
