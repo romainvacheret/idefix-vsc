@@ -14,7 +14,8 @@
 	"activationEvents": [
 		"onCommand:idefix-vsc.helloWorld",
 		"onCommand:idefix-vsc.transferWorkspaceFolderCommand",
-		"onCommand:idefix-vsc.compileProjectCommand"
+		"onCommand:idefix-vsc.compileProjectCommand",
+		"onCommand:idefix-vsc.retrieveFileFromServerCommand"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -30,6 +31,10 @@
 			{
 				"command": "idefix-vsc.compileProjectCommand",
 				"title": "IDEfix: Compile project"
+			},
+			{
+				"command": "idefix-vsc.retrieveFileFromServerCommand",
+				"title": "IDEfix: Download proposed patch"
 			}
 		]
 	},
