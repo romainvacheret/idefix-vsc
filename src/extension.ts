@@ -1,7 +1,7 @@
 import * as vsc from 'vscode';
 
 import { transferWorkspaceFolderCommand, retrieveFileFromServerCommand } from './commands/files';
-import { compileProjectCommand } from './commands/execution';
+import { compileProjectCommand, launchProjectAnalysisCommand } from './commands/execution';
 import { createTmpDirectory } from './utils/files';
 
 const _clearWorkspaceStates = (context: vsc.ExtensionContext) => 
@@ -26,11 +26,15 @@ export const activate = (context: vsc.ExtensionContext) => {
 	const commandRetrieveFileFromServerCommand = vsc.commands.registerCommand(
 		'idefix-vsc.retrieveFileFromServerCommand',
 		() => retrieveFileFromServerCommand(context));
+	const commandLaunchProjectAnalysisCommand = vsc.commands.registerCommand(
+		'idefix-vsc.launchProjectAnalysisCommand',
+		() => launchProjectAnalysisCommand(context));
 
 	context.subscriptions.push(disposable);
 	context.subscriptions.push(commandTransferWorkspaceFolderCommand);
 	context.subscriptions.push(commandRetrieveFileFromServerCommand);
 	context.subscriptions.push(commandCompileProjectCommand);
+	context.subscriptions.push(commandLaunchProjectAnalysisCommand);
 }
 
 export const deactivate = () => {}

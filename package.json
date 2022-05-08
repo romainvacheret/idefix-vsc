@@ -15,7 +15,8 @@
 		"onCommand:idefix-vsc.helloWorld",
 		"onCommand:idefix-vsc.transferWorkspaceFolderCommand",
 		"onCommand:idefix-vsc.compileProjectCommand",
-		"onCommand:idefix-vsc.retrieveFileFromServerCommand"
+		"onCommand:idefix-vsc.retrieveFileFromServerCommand",
+		"onCommand:idefix-vsc.launchProjectAnalysisCommand"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -35,6 +36,10 @@
 			{
 				"command": "idefix-vsc.retrieveFileFromServerCommand",
 				"title": "IDEfix: Download proposed patch"
+			},
+			{
+				"command": "idefix-vsc.launchProjectAnalysisCommand",
+				"title": "IDEfix: Launch project analysis"
 			}
 		]
 	},
