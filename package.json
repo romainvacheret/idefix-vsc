@@ -16,7 +16,9 @@
 		"onCommand:idefix-vsc.transferWorkspaceFolderCommand",
 		"onCommand:idefix-vsc.compileProjectCommand",
 		"onCommand:idefix-vsc.retrieveFileFromServerCommand",
-		"onCommand:idefix-vsc.launchProjectAnalysisCommand"
+		"onCommand:idefix-vsc.launchProjectAnalysisCommand",
+		"onCommand:idefix-vsc.listGeneratedDiffsCommand",
+		"onView:diffProvider"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -40,8 +42,39 @@
 			{
 				"command": "idefix-vsc.launchProjectAnalysisCommand",
 				"title": "IDEfix: Launch project analysis"
+			},
+			{
+				"command": "idefix-vsc.listGeneratedDiffsCommand",
+				"title": "IDEfix: List generated diffs"
+			},
+			{
+				"command": "diffProvider.refreshEntry",
+				"title": "Refresh"
+			},
+			{
+				"command": "idefix-vsc.displayDiff",
+				"enablement": "false"
 			}
-		]
+
+
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "diffProvider",
+					"name": "Idefix - generated diffs"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "diffProvider.refreshEntry",
+					"when": "view == diffProvider",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

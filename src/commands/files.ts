@@ -41,3 +41,10 @@ export const retrieveFileFromServerCommand = (context: vsc.ExtensionContext): vo
 			vsc.window.showErrorMessage('An error occured during the download of the patch');
 	})();
 }
+
+
+export const displayDiff = (diffId: string, text: string) => {
+	const output = vsc.window.createOutputChannel(diffId);
+	output.append(text);
+	output.show();
+}

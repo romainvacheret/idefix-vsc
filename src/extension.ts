@@ -1,8 +1,9 @@
 import * as vsc from 'vscode';
 
-import { transferWorkspaceFolderCommand, retrieveFileFromServerCommand } from './commands/files';
-import { compileProjectCommand, launchProjectAnalysisCommand } from './commands/execution';
+import { transferWorkspaceFolderCommand, retrieveFileFromServerCommand, displayDiff } from './commands/files';
+import { compileProjectCommand, launchProjectAnalysisCommand, listGeneratedDiffs } from './commands/execution';
 import { createTmpDirectory } from './utils/files';
+import { DiffProvider } from './gui/DiffProvider';
 
 const _clearWorkspaceStates = (context: vsc.ExtensionContext) => 
 	context.workspaceState.keys()
@@ -29,12 +30,33 @@ export const activate = (context: vsc.ExtensionContext) => {
 	const commandLaunchProjectAnalysisCommand = vsc.commands.registerCommand(
 		'idefix-vsc.launchProjectAnalysisCommand',
 		() => launchProjectAnalysisCommand(context));
+	const commandListGeneratedDiffsCommand = vsc.commands.registerCommand(
+		'idefix-vsc.listGeneratedDiffsCommand',
+		() => listGeneratedDiffs(context));
+		
+	
+		vsc.commands.registerCommand(
+			'idefix-vsc.displayDiff',
+			displayDiff);
+	const diffProvider = new DiffProvider(context);
+		vsc.commands.registerCommand('diffProvider.refreshEntry', () =>
+			diffProvider.refresh()
+	);
+
+	vsc.window.registerTreeDataProvider(
+		'diffProvider',
+		diffProvider
+	);
 
 	context.subscriptions.push(disposable);
 	context.subscriptions.push(commandTransferWorkspaceFolderCommand);
 	context.subscriptions.push(commandRetrieveFileFromServerCommand);
 	context.subscriptions.push(commandCompileProjectCommand);
 	context.subscriptions.push(commandLaunchProjectAnalysisCommand);
+	context.subscriptions.push(commandListGeneratedDiffsCommand);
+	
+
+	
 }
 
 export const deactivate = () => {}

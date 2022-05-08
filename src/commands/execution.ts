@@ -49,3 +49,17 @@ export const launchProjectAnalysisCommand = (context: vsc.ExtensionContext): voi
 		sendJsonRpcRequest('analyze', [defaultParameters], context);
 	})();
 }
+
+export const listGeneratedDiffs = (context: vsc.ExtensionContext): void => {
+	(async () => {
+		const optionalUri = getFirstWorkspaceUriIfExists();
+		if(optionalUri === undefined) {
+			console.log('Project name is not defined');
+			vsc.window.showErrorMessage('Project name is not defined');
+			return;
+		}
+
+		const workspacePath = basename(optionalUri.uri.path);
+		sendJsonRpcRequest('list-diffs', [workspacePath], context, 'generatedDiffs');
+	})();
+}
