@@ -54,6 +54,10 @@
 			{
 				"command": "idefix-vsc.displayDiff",
 				"enablement": "false"
+			},
+			{
+				"command": "idefix-vsc.applyDiff",
+				"title": "Apply"
 			}
 
 
@@ -73,7 +77,15 @@
 					"when": "view == diffProvider",
 					"group": "navigation"
 				}
+			],
+			"view/item/context": [
+				{
+					"command": "idefix-vsc.applyDiff",
+					"location": "diffProvider/item/context",
+					"group": "inline"
+				}
 			]
+
 		}
 	},
 	"scripts": {

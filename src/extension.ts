@@ -1,9 +1,9 @@
 import * as vsc from 'vscode';
 
-import { transferWorkspaceFolderCommand, retrieveFileFromServerCommand, displayDiff } from './commands/files';
+import { transferWorkspaceFolderCommand, retrieveFileFromServerCommand, displayDiff, applyDiff } from './commands/files';
 import { compileProjectCommand, launchProjectAnalysisCommand, listGeneratedDiffs } from './commands/execution';
 import { createTmpDirectory } from './utils/files';
-import { DiffProvider } from './gui/DiffProvider';
+import { Diff, DiffProvider } from './gui/DiffProvider';
 
 const _clearWorkspaceStates = (context: vsc.ExtensionContext) => 
 	context.workspaceState.keys()
@@ -24,9 +24,9 @@ export const activate = (context: vsc.ExtensionContext) => {
 	const commandCompileProjectCommand = vsc.commands.registerCommand(
 		'idefix-vsc.compileProjectCommand',
 		() => compileProjectCommand(context));
-	const commandRetrieveFileFromServerCommand = vsc.commands.registerCommand(
-		'idefix-vsc.retrieveFileFromServerCommand',
-		() => retrieveFileFromServerCommand(context));
+	// const commandRetrieveFileFromServerCommand = vsc.commands.registerCommand(
+	// 	'idefix-vsc.retrieveFileFromServerCommand',
+	// 	() => retrieveFileFromServerCommand(context));
 	const commandLaunchProjectAnalysisCommand = vsc.commands.registerCommand(
 		'idefix-vsc.launchProjectAnalysisCommand',
 		() => launchProjectAnalysisCommand(context));
@@ -35,13 +35,17 @@ export const activate = (context: vsc.ExtensionContext) => {
 		() => listGeneratedDiffs(context));
 		
 	
-		vsc.commands.registerCommand(
-			'idefix-vsc.displayDiff',
-			displayDiff);
+	vsc.commands.registerCommand(
+		'idefix-vsc.displayDiff',
+		displayDiff);
+	vsc.commands.registerCommand(
+		'idefix-vsc.applyDiff',
+		(diff: Diff) => applyDiff(diff, context));
 	const diffProvider = new DiffProvider(context);
 		vsc.commands.registerCommand('diffProvider.refreshEntry', () =>
 			diffProvider.refresh()
 	);
+	
 
 	vsc.window.registerTreeDataProvider(
 		'diffProvider',
@@ -50,7 +54,7 @@ export const activate = (context: vsc.ExtensionContext) => {
 
 	context.subscriptions.push(disposable);
 	context.subscriptions.push(commandTransferWorkspaceFolderCommand);
-	context.subscriptions.push(commandRetrieveFileFromServerCommand);
+	// context.subscriptions.push(commandRetrieveFileFromServerCommand);
 	context.subscriptions.push(commandCompileProjectCommand);
 	context.subscriptions.push(commandLaunchProjectAnalysisCommand);
 	context.subscriptions.push(commandListGeneratedDiffsCommand);
