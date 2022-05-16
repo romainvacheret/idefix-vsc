@@ -9,25 +9,35 @@ const _ftpServerConfig = {
     password: "idefix",
 };
 
-export const transferFolderToServer = async(folderUri: vsc.Uri, 
-        context: vsc.ExtensionContext): Promise<void> => {
+export const transferFolderToServer = (folderUri: vsc.Uri, 
+        context: vsc.ExtensionContext): void => {
 
-    const client = new ftp.Client();
-    const remotePath = basename(folderUri.path);
-    client.ftp.verbose = true;
+    (async () => {
+        const client = new ftp.Client();
+        const remotePath = basename(folderUri.path);
+        let anErrorOccured: boolean = false;
+        client.ftp.verbose = true;
 
-    try {
-        await client.access(_ftpServerConfig);
-		await client.ensureDir(remotePath);
-        await client.clearWorkingDir();
-		await client.uploadFromDir(folderUri.path);
-	} catch(err) {
-        console.log(err);
-        context.workspaceState.update('isTcpTransferSuccessfull', false);
-    }
+        try {
+            await client.access(_ftpServerConfig);
+            await client.ensureDir(remotePath);
+            await client.clearWorkingDir();
+            await client.uploadFromDir(folderUri.path);
+        } catch(err) {
+            console.log(err);
+            vsc.window.showErrorMessage('An error occured during the compilation of the project');
+            anErrorOccured = true;
+            await context.workspaceState.update('isTcpTransferSuccessful', false);
+        }
+        finally {
+            client.close();
+        }
 
-    context.workspaceState.update('isTcpTransferSuccessfull', true);
-    client.close();
+        if(!anErrorOccured) {
+            vsc.window.showInformationMessage('Project compiled successfully');
+            await context.workspaceState.update('isTcpTransferSuccessful', true);
+        }
+    })();
 }
 
 

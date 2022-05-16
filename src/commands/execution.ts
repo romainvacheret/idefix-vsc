@@ -10,20 +10,16 @@ export const compileProjectCommand = (context: vsc.ExtensionContext): void => {
 		// TODO: Make the command a parameter 
 		const optionalUri = getFirstWorkspaceUriIfExists();
 		if(optionalUri === undefined) {
-			console.log('Project name is not defined');
 			vsc.window.showErrorMessage('Project name is not defined');
-			context.workspaceState.update('isJsonRpcCommandSuccessfull-compile', false);
+			await context.workspaceState.update('isJsonRpcCommandSuccessfull-compile', false);
 			return;
 		}
 		const compileCommand = 'mvn clean compile test -DskipTests';
-		sendJsonRpcRequest('compile', [basename(optionalUri.uri.path), compileCommand], context);
+		const statusCallback = (status: boolean) => status ? 
+			vsc.window.showInformationMessage('Project compiled successfully') :
+			vsc.window.showErrorMessage('An error occured during the compilation of the project');
 
-		// TODO: To look into & fix
-		// Note: Because the value is set in the callback, the value will always be
-		// undefined the first time the command is triggered
-		context.workspaceState.get('isJsonRpcCommandSuccessfull-compile') === true ?
-		vsc.window.showInformationMessage('Project compiled successfully') :
-		vsc.window.showErrorMessage('An error occured during the compilation of the project');
+		sendJsonRpcRequest('compile', [basename(optionalUri.uri.path), compileCommand], context, statusCallback);
 	})();
 }
 
@@ -32,7 +28,6 @@ export const launchProjectAnalysisCommand = (context: vsc.ExtensionContext): voi
 	(async () => {
 		const optionalUri = getFirstWorkspaceUriIfExists();
 		if(optionalUri === undefined) {
-			console.log('Project name is not defined');
 			vsc.window.showErrorMessage('Project name is not defined');
 			return;
 		}
@@ -45,8 +40,11 @@ export const launchProjectAnalysisCommand = (context: vsc.ExtensionContext): voi
 			'-bintestfolder':  '/target/test-classes/',
 			'-location': workspacePath,
 			'-dependencies': `${workspacePath}/lib`}
+		const statusCallback = (status: boolean) => status ? 
+			vsc.window.showInformationMessage('Analysis ran successfully') :
+			vsc.window.showErrorMessage('An error occured during the analysis');
 
-		sendJsonRpcRequest('analyze', [defaultParameters], context);
+		sendJsonRpcRequest('analyze', [defaultParameters], context, statusCallback);
 	})();
 }
 
@@ -54,12 +52,15 @@ export const listGeneratedDiffs = (context: vsc.ExtensionContext): void => {
 	(async () => {
 		const optionalUri = getFirstWorkspaceUriIfExists();
 		if(optionalUri === undefined) {
-			console.log('Project name is not defined');
 			vsc.window.showErrorMessage('Project name is not defined');
 			return;
 		}
 
 		const workspacePath = basename(optionalUri.uri.path);
-		sendJsonRpcRequest('list-diffs', [workspacePath], context, 'generatedDiffs');
+		const statusCallback = (status: boolean) => status ? 
+			vsc.window.showInformationMessage('Diffs downloaded successfully') :
+			vsc.window.showErrorMessage('An error occured during the downlaod of the diffs');
+
+		sendJsonRpcRequest('list-diffs', [workspacePath], context, statusCallback, 'generatedDiffs');
 	})();
 }

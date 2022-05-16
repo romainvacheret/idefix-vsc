@@ -13,13 +13,7 @@ export const transferWorkspaceFolderCommand = (context: vsc.ExtensionContext): v
 			return false;
 		}
 
-		const workspaceFolderUri = workspaceFolder.uri;
-		await transferFolderToServer(workspaceFolderUri, context);
-		
-		// TODO: Add more context to the error message
-		context.workspaceState.get('isTcpTransferSuccessfull') === true ?
-			vsc.window.showInformationMessage('Folder successfully transfered to the server') :
-			vsc.window.showErrorMessage('An error occured during the file transfer');
+		transferFolderToServer(workspaceFolder.uri, context);
 	})();
 }
 
