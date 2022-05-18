@@ -29,11 +29,11 @@
 			},
 			{
 				"command": "idefix-vsc.transferWorkspaceFolderCommand",
-				"title": "IDEfix: Transfer folder"
+				"title": "IDEfix: 1 - Transfer folder"
 			},
 			{
 				"command": "idefix-vsc.compileProjectCommand",
-				"title": "IDEfix: Compile project"
+				"title": "IDEfix: 2 - Compile project"
 			},
 			{
 				"command": "idefix-vsc.retrieveFileFromServerCommand",
@@ -41,11 +41,11 @@
 			},
 			{
 				"command": "idefix-vsc.launchProjectAnalysisCommand",
-				"title": "IDEfix: Launch project analysis"
+				"title": "IDEfix: 3 - Launch project analysis"
 			},
 			{
 				"command": "idefix-vsc.listGeneratedDiffsCommand",
-				"title": "IDEfix: List generated diffs"
+				"title": "IDEfix: 4 - List generated diffs"
 			},
 			{
 				"command": "diffProvider.refreshEntry",
